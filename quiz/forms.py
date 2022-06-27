@@ -13,10 +13,11 @@ class QuestionInlineFormSet(forms.BaseInlineFormSet):
                 f'до {self.instance.QUESTION_MAX_LIMIT}'
             )
 
-        # излишний валидатор проверки:
+        # валидатор проверки:
         # "максимального значения order_num - должно быть не более максимально допустимого кол-ва вопросов"
-        if len(self.forms) > self.instance.QUESTION_MAX_LIMIT:
-            raise ValidationError(f'Максимальное количество вопросов {self.instance.QUESTION_MAX_LIMIT}')
+        for form in self.forms:
+            if form.instance.order_num > self.instance.QUESTION_MAX_LIMIT:
+                raise ValidationError(f'Максимальное количество вопросов {self.instance.QUESTION_MAX_LIMIT}')
 
         # валидатор проверки:
         # "корректности заполнения order_num(должен быть от 1 до N, и увеличиваться на 1)"
