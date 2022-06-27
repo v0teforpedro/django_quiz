@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Удаление теста {% endblock %}
+
+{% block header %}
+    Удалить незаконченный тест
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <h5 style="text-align: center">Подтвердите удаление теста по теме: <b style="color: red">{{ result.exam }}</b></h5>
+        <br>
+        <div style="text-align: center">
+            <button class="btn btn-outline-danger btn-lg" type="submit">Подтверждаю</button>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url 'quiz:details' uuid=result.exam.uuid %}">Отменить</a>
+        </div>
+    </form>
+{% endblock %}
