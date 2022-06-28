@@ -63,7 +63,7 @@ class Choice(models.Model):
 
 class Result(BaseModel):
     class STATE(models.IntegerChoices):
-        NEW = 0, "New"
+        NEW = 0, "In Progress"
         FINISHED = 1, "Finished"
 
     user = models.ForeignKey(get_user_model(), related_name='results', on_delete=models.CASCADE)
@@ -92,3 +92,12 @@ class Result(BaseModel):
             self.state = self.STATE.FINISHED
 
         self.save()
+
+    def points(self):
+        return max(0, self.num_correct_answers - self.num_incorrect_answers)
+
+    @property
+    def duration(self):
+        timedelta_object = self.update_timestamp - self.create_timestamp
+        stripped_timedelta_object = str(timedelta_object).split(".")[0]
+        return stripped_timedelta_object

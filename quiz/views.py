@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import ChoicesFormSet
 from .models import Exam, Question, Result
@@ -145,5 +145,16 @@ class ExamResultUpdateView(LoginRequiredMixin, UpdateView):
         )
 
 
-# class ExamResultDeleteView(LoginRequiredMixin, DeleteView):
-#     pass
+class ExamResultDeleteView(LoginRequiredMixin, DeleteView):
+    model = Result
+    template_name = 'results/confirm_delete.html'
+    pk_url_kwarg = 'uuid'
+    context_object_name = 'result'
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('res_uuid')
+
+        return self.get_queryset().get(uuid=uuid)
+
+    def get_success_url(self):
+        return reverse('quiz:details', kwargs={'uuid': self.object.exam.uuid})
