@@ -29,6 +29,9 @@ class Exam(BaseModel):
     def __str__(self):
         return self.title
 
+    def questions_count(self):
+        return self.questions.count()
+
     class Meta:
         verbose_name = 'Exam'
         verbose_name_plural = 'Exams'
