@@ -26,7 +26,7 @@ class QuestionInlineFormSet(forms.BaseInlineFormSet):
             if form.instance.order_num == order_start:
                 order_start += 1
             else:
-                raise ValidationError(f'Все вопросы должны идти по порядку')
+                raise ValidationError('Все вопросы должны идти по порядку')
 
 
 class ChoiceInlineFormSet(forms.BaseInlineFormSet):

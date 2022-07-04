@@ -94,7 +94,10 @@ class ExamResultQuestionView(LoginRequiredMixin, UpdateView):
         choices = ChoicesFormSet(data=request.POST)
         selected_choices = ['is_selected' in form.changed_data for form in choices.forms]
         # result = Result.objects.get(uuid=res_uuid)
-        result.update_result(result.current_order_number + 1, question, selected_choices)
+        if sum(selected_choices) != 1:
+            raise ValueError('You need to choose only 1 answer!')
+        else:
+            result.update_result(result.current_order_number + 1, question, selected_choices)
 
         if result.state == Result.STATE.FINISHED:
             return HttpResponseRedirect(
