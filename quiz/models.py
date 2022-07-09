@@ -99,8 +99,11 @@ class Result(BaseModel):
     def points(self):
         return max(0, self.num_correct_answers - self.num_incorrect_answers)
 
-    @property
+    # @property
+    # def duration(self):
+    #     timedelta_object = self.update_timestamp - self.create_timestamp
+    #     stripped_timedelta_object = str(timedelta_object).split(".")[0]
+    #     return stripped_timedelta_object
+
     def duration(self):
-        timedelta_object = self.update_timestamp - self.create_timestamp
-        stripped_timedelta_object = str(timedelta_object).split(".")[0]
-        return stripped_timedelta_object
+        return self.update_timestamp.replace(microsecond=0) - self.create_timestamp.replace(microsecond=0)
