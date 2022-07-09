@@ -1,5 +1,7 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class CustomUser(AbstractUser):
@@ -13,3 +15,9 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+@receiver(post_save, sender=CustomUser)
+def move_user_to_group(sender, instance, created, **kwargs):
+    if created and not instance.is_superuser:
+        instance.groups.add(Group.objects.get(name='Users'))
